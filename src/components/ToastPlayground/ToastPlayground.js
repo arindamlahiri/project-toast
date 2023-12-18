@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Button from '../Button';
 
 import styles from './ToastPlayground.module.css';
+import Toast from '../Toast/Toast';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
@@ -10,8 +11,14 @@ function ToastPlayground() {
 	const [message, setMessage] = useState('');
 	const [variant, setVariant] = useState('notice');
 
+	const [isToastVisible, setIsToastVisible] = useState(false);
+
 	const popToastHandler = () => {
-		console.log('Pop Toast', { message, variant });
+		setIsToastVisible(true);
+	};
+
+	const handleToastClose = () => {
+		setIsToastVisible(false);
 	};
 
 	return (
@@ -20,6 +27,13 @@ function ToastPlayground() {
 				<img alt="Cute toast mascot" src="/toast.png" />
 				<h1>Toast Playground</h1>
 			</header>
+
+			<Toast
+				isOpen={isToastVisible}
+				message={message}
+				variant={variant}
+				onClose={handleToastClose}
+			/>
 
 			<div className={styles.controlsWrapper}>
 				<div className={styles.row}>
