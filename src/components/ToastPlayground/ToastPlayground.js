@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import Button from '../Button';
 
 import styles from './ToastPlayground.module.css';
-import Toast from '../Toast/Toast';
+import ToastShelf from '../ToastShelf/ToastShelf';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
 	const [message, setMessage] = useState('');
 	const [variant, setVariant] = useState('notice');
+	const [toastMessages, setToastMessages] = useState([]);
 
-	const [isToastVisible, setIsToastVisible] = useState(false);
+	const messageInputRef = useRef(null);
 
-	const popToastHandler = () => {
-		setIsToastVisible(true);
-	};
-
-	const handleToastClose = () => {
-		setIsToastVisible(false);
+	const popToastHandler = (e) => {
+		e.preventDefault();
+		setToastMessages([
+			...toastMessages,
+			{ id: crypto.randomUUID(), message, variant }
+		]);
+		setMessage('');
+		setVariant('notice');
+		messageInputRef.current.focus();
 	};
 
 	return (
@@ -28,13 +32,12 @@ function ToastPlayground() {
 				<h1>Toast Playground</h1>
 			</header>
 
-			{isToastVisible && (
-				<Toast variant={variant} onClose={handleToastClose}>
-					{message}
-				</Toast>
-			)}
+			<ToastShelf
+				messages={toastMessages}
+				setMessages={setToastMessages}
+			/>
 
-			<div className={styles.controlsWrapper}>
+			<form className={styles.controlsWrapper}>
 				<div className={styles.row}>
 					<label
 						htmlFor="message"
@@ -45,6 +48,7 @@ function ToastPlayground() {
 					</label>
 					<div className={styles.inputWrapper}>
 						<textarea
+							ref={messageInputRef}
 							id="message"
 							className={styles.messageInput}
 							value={message}
@@ -84,10 +88,12 @@ function ToastPlayground() {
 					<div
 						className={`${styles.inputWrapper} ${styles.radioWrapper}`}
 					>
-						<Button onClick={popToastHandler}>Pop Toast!</Button>
+						<Button type="submit" onClick={popToastHandler}>
+							Pop Toast!
+						</Button>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	);
 }
