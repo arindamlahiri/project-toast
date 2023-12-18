@@ -27,13 +27,18 @@ function ToastProvider({ children }) {
 		[toastMessages]
 	);
 
+	const dismissAllToasts = useCallback(() => {
+		setToastMessages([]);
+	}, []);
+
 	const value = useMemo(() => {
 		return {
 			toastMessages,
 			onToastAdd,
-			onToastDismiss
+			onToastDismiss,
+			dismissAllToasts
 		};
-	}, [toastMessages, onToastAdd, onToastDismiss]);
+	}, [toastMessages, onToastAdd, onToastDismiss, dismissAllToasts]);
 
 	return (
 		<ToastContext.Provider value={value}>{children}</ToastContext.Provider>
