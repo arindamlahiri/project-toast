@@ -1,21 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Toast from '../Toast';
 import styles from './ToastShelf.module.css';
+import { ToastContext } from '../ToastProvider';
 
-function ToastShelf({ messages, setMessages }) {
-	const onToastDismiss = (id) => {
-		const newMessages = [...messages];
-		const index = newMessages.findIndex((msg) => msg.id === id);
-		if (index > -1) {
-			newMessages.splice(index, 1);
-		}
-		setMessages(newMessages);
-	};
+function ToastShelf() {
+	const { toastMessages, onToastDismiss } = useContext(ToastContext);
 
 	return (
 		<ol className={styles.wrapper}>
-			{messages.map(({ id, message, variant }) => (
+			{toastMessages.map(({ id, message, variant }) => (
 				<li key={id} className={styles.toastWrapper}>
 					<Toast variant={variant} onClose={() => onToastDismiss(id)}>
 						{message}
