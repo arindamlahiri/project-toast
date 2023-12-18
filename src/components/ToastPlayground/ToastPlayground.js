@@ -28,12 +28,11 @@ function ToastPlayground() {
 				<h1>Toast Playground</h1>
 			</header>
 
-			<Toast
-				isOpen={isToastVisible}
-				message={message}
-				variant={variant}
-				onClose={handleToastClose}
-			/>
+			{isToastVisible && (
+				<Toast variant={variant} onClose={handleToastClose}>
+					{message}
+				</Toast>
+			)}
 
 			<div className={styles.controlsWrapper}>
 				<div className={styles.row}>
